@@ -27,14 +27,23 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-row>
+        <v-form
+          ref="form"
+          v-model="valid"
+          :lazy-validation="lazy"
+          class="d-flex align-center justify-center"
+        >
+          <v-text-field
+            label="Pesquisar..."
+            solo
+          ></v-text-field>
+          <v-btn>
+            <i class="material-icons">search</i>
+          </v-btn>
+        </v-form>
+      </v-row>
+      
     </v-app-bar>
 
     <v-content>
