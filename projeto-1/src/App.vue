@@ -2,68 +2,76 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
-      dark
+      color="#ff9933"
+      fixed
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-row>
-        <v-form
-          ref="form"
-          v-model="valid"
-          :lazy-validation="lazy"
-          class="d-flex align-center justify-center"
+      <v-col cols="11">
+        <v-text-field
+          solo
+          flat
+          clearable
+          hide-details
+          label="Pesquisar..."
+          v-model="itemSearch"
+          v-on:keyup.enter="searchGifs"
         >
-          <v-text-field
-            label="Pesquisar..."
-            solo
-          ></v-text-field>
-          <v-btn>
-            <i class="material-icons">search</i>
-          </v-btn>
-        </v-form>
-      </v-row>
-      
+        </v-text-field>
+      </v-col>
+      <v-col>
+        <v-btn v-on:click="searchGifs" color="white">
+          <v-icon color="black">search</v-icon>
+        </v-btn>
+      </v-col>
     </v-app-bar>
 
     <v-content>
-      <HelloWorld/>
+      <GifContent v-bind:gifs="gifs"/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+  import GifContent from './components/GifContent';
+  const axios = require('axios');
 
-export default {
-  name: 'App',
+  export default {
+    name: 'App',
 
-  components: {
-    HelloWorld,
-  },
+    components: {
+      GifContent,
+    },
 
-  data: () => ({
-    //
-  }),
-};
+    data() {
+      return{
+        itemSearch: '',
+        gifs: []
+      }
+    },
+    methods: {
+      searchGifs: function(){
+        const url_search = "https://api.giphy.com/v1/gifs/search"
+        let params = {
+            api_key: '1NvU25d6HoFs8IVQptotFtTq1uFgjoSX',
+            q: this.itemSearch
+        }
+        axios.get(url_search, { params }).then((response) =>{
+          this.gifs = response.data.data
+        })
+      }
+    },
+    created(){
+      const url_trend = "https://api.giphy.com/v1/gifs/trending"
+      let params = {
+          api_key: '1NvU25d6HoFs8IVQptotFtTq1uFgjoSX',
+          limit: 20
+      }
+      axios.get(url_trend, { params }).then((response) =>{
+        this.gifs = response.data.data
+      })
+    }
+  };
 </script>
+
+<style>
+
+</style>
