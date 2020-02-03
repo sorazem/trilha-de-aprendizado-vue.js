@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
+      color="#4dc3ff"
       dark
     >
       <v-toolbar-title>Beer Lover</v-toolbar-title>
@@ -21,24 +21,23 @@
             outlined
             clearable
             hide-details
-            label="Pesquisar..."
+            label="Ex: trashy_blonde"
             v-model="itemSearch"
-            v-on:keyup.enter="searchGifs"
-            color="primary"
+            v-on:keyup.enter="search"
+            color="#4dc3ff"
             id="search"
           >
           </v-text-field>
 
           <v-btn 
-            v-on:click="searchGifs" 
+            v-on:click="search" 
             depressed 
-            color="primary"
+            color="#4dc3ff"
           >
             <v-icon color="white">search</v-icon>
           </v-btn>
       </v-row>
-      
-      <Card></Card>
+      <Card v-bind:beers="beers"></Card>
     </v-content>
   </v-app>
 </template>
@@ -46,16 +45,38 @@
 <script>
 import Card from './components/Card';
 
+const axios = require('axios');
+const url_search = "https://api.punkapi.com/v2/beers"
+
 export default {
   name: 'App',
-
   components: {
     Card
   },
 
-  data: () => ({
-    beers: []
-  }),
+  data(){
+    return{
+      itemSearch: '',
+      beers: []
+    }
+  },
+
+  methods: {
+    search: function(){
+      let params = {
+        beer_name: this.itemSearch
+      
+      }
+      axios.get(url_search, { params }).then((response) =>{
+        this.beers = response.data
+      })
+    }
+  },
+  created() {
+    axios.get(url_search).then((response) =>{
+      this.beers = response.data
+    })
+  }
 };
 </script>
 
