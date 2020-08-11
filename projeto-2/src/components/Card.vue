@@ -1,8 +1,9 @@
 <template>
     <div class="d-flex flex-wrap mx-2 justify-space-between">
         <div id="card" class="elevation-2 mb-6" v-for="beer in beers" :key="beer.id">
-          <v-icon v-if="isFavourite(beer.id)" id="favorite" color="#4dc3ff">star</v-icon>
-          <v-icon v-else v-on:click="addToFavourites(beer.id, beer.name, beer.description, beer.image_url)" id="favorite" color="#4dc3ff">star_border</v-icon>
+          <v-icon v-if="!isFavourite(beer.id)" v-on:click="addToFavourites(beer.id, beer.name, beer.description, beer.image_url)" id="favorite" :key="beer.id" color="#4dc3ff">star_border</v-icon>
+          <v-icon v-else v-on:click="removeFromFavourites(beer.id)" id="favorite" :key="beer.id" color="#4dc3ff">star</v-icon>
+
           <div class="d-flex container">
               <v-col cols="5">
                   <img :src="beer.image_url"/>
@@ -19,27 +20,32 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
       name: 'Card',
       props: ['beers'],
+      computed: mapState ({
+        favourites: state => state.favourites
+      }),
       methods: {
         addToFavourites(id, name, desc, url){
-          this.$store.commit('addFavourite', {id: id, name: name, desc: desc, url: url})
+          this.$store.commit('addFavourite', {id: id, name: name, description: desc, image_url: url})
+        },
+        removeFromFavourites(id){
+          this.favourites.forEach((fav, index) => {
+            if(fav.id == id){
+              this.favourites.splice(index, 1)
+            }
+          });
+
         },
         isFavourite(id){
-          if(this.$store.state.favourites.length === 0){
+          if(this.favourites.length === 0){
             return false
           }
           else{
-            this.$store.state.favourites.forEach((i) => {
-              if(i.id == id){
-                console.log(i)
-                return true
-              }
-              else{
-                return false
-              }
-            });
+            return this.favourites.some(i => i.id == id)
           }
         }
       }

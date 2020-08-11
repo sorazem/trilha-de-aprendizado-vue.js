@@ -31,4 +31,9 @@
     text-decoration: none;
     color: white !important;
   }
+
+  .active{
+    text-decoration: underline;
+    font-weight: bold;
+  }
 </style>
