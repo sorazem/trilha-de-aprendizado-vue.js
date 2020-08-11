@@ -1,34 +1,49 @@
 <template>
     <div class="d-flex flex-wrap mx-2 justify-space-between">
-        
         <div id="card" class="elevation-2 mb-6" v-for="beer in beers" :key="beer.id">
-            <v-icon v-on:click="addToFavourites(beer.id)" id="favorite" color="#4dc3ff">star_border</v-icon>
-            <div class="d-flex container">
-                <v-col cols="5">
-                    <img :src="beer.image_url"/>
-                </v-col>
-                <v-col>
-                    <div id="text">
-                        <h3>{{ beer.name }}</h3>
-                        <p>{{ beer.description }}</p>
-                    </div>
-                </v-col>                
-            </div>
+          <v-icon v-if="isFavourite(beer.id)" id="favorite" color="#4dc3ff">star</v-icon>
+          <v-icon v-else v-on:click="addToFavourites(beer.id, beer.name, beer.description, beer.image_url)" id="favorite" color="#4dc3ff">star_border</v-icon>
+          <div class="d-flex container">
+              <v-col cols="5">
+                  <img :src="beer.image_url"/>
+              </v-col>
+              <v-col>
+                  <div id="text">
+                      <h3>{{ beer.name }}</h3>
+                      <p>{{ beer.description }}</p>
+                  </div>
+              </v-col>
+          </div>
         </div>
     </div>
 </template>
 
 <script>
-
-export default {
-    name: 'Card',
-    props: ['beers'],
-    data() {
-        return {
-            //
+  export default {
+      name: 'Card',
+      props: ['beers'],
+      methods: {
+        addToFavourites(id, name, desc, url){
+          this.$store.commit('addFavourite', {id: id, name: name, desc: desc, url: url})
+        },
+        isFavourite(id){
+          if(this.$store.state.favourites.length === 0){
+            return false
+          }
+          else{
+            this.$store.state.favourites.forEach((i) => {
+              if(i.id == id){
+                console.log(i)
+                return true
+              }
+              else{
+                return false
+              }
+            });
+          }
         }
-    }
-}
+      }
+  }
 </script>
 
 <style scoped>
@@ -84,7 +99,7 @@ export default {
         }
 
         img{
-            width: 100px;
+            max-width: 100px;
         }
     }
 </style>

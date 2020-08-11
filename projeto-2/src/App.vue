@@ -13,25 +13,22 @@
       <router-link to="/favourites">Favourites</router-link>
     </v-app-bar>
 
-    <v-content class="px-8">
-      <Home></Home>
-    </v-content>
+    <v-main class="px-8">
+      <router-view />
+    </v-main>
   </v-app>
 </template>
 
 <script>
-import Home from './components/Home';
-
-export default {
-  name: 'App',
-  components: {
-    Home
-  },
-
-  data(){
-    return{
-      //
-    }
-  }
-};
+  export default {
+    name: 'App'
+  };
 </script>
+
+<style>
+  a{
+    padding-right: 20px;
+    text-decoration: none;
+    color: white !important;
+  }
+</style>
