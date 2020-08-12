@@ -32,8 +32,11 @@
     color: white !important;
   }
 
-  .active{
+  a:hover{
     text-decoration: underline;
+  }
+
+  .active{
     font-weight: bold;
   }
 </style>

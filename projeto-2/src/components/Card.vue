@@ -1,6 +1,6 @@
 <template>
-    <div class="d-flex flex-wrap mx-2 justify-space-between">
-        <div id="card" class="elevation-2 mb-6" v-for="beer in beers" :key="beer.id">
+    <div class="d-flex flex-wrap mx-2 justify-space-around">
+        <div id="card" class="elevation-3 mt-4 mb-6" v-for="beer in beers" :key="beer.id">
           <v-icon v-if="!isFavourite(beer.id)" v-on:click="addToFavourites(beer.id, beer.name, beer.description, beer.image_url)" id="favorite" :key="beer.id" color="#4dc3ff">star_border</v-icon>
           <v-icon v-else v-on:click="removeFromFavourites(beer.id)" id="favorite" :key="beer.id" color="#4dc3ff">star</v-icon>
 
@@ -79,6 +79,14 @@
     img{
         height: 35vh;
         overflow: visible;
+    }
+
+    p{
+      font-size: 14px;
+    }
+
+    h3{
+      margin-bottom: 1rem;
     }
 
     @media screen and (max-width: 991px){
